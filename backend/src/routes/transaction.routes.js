@@ -44,7 +44,6 @@ router.post("/", auth, permit("admin","user"), txnLimiter, async (req, res, next
     const { value, error } = txnSchema.validate(req.body);
     if (error) return res.status(400).json({ message: error.message });
     const txn = await Transaction.create({ ...value, user: req.user.id });
-    // Invalidate analytics cache for this user
     await cacheDel(`analytics:${req.user.id}:*`);
     res.status(201).json(txn);
   } catch (e) { next(e); }

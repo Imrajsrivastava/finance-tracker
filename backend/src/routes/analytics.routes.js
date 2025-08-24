@@ -27,7 +27,6 @@ router.get("/", auth, analyticsLimiter, async (req, res, next) => {
 
     const txns = await Transaction.find({ user: req.user.id, date: { $gte: start, $lte: end } });
 
-    // Monthly totals
     const monthly = Array(12).fill(0).map(() => ({ income: 0, expense: 0 }));
     const categoryMap = {};
     let incomeTotal = 0, expenseTotal = 0;
@@ -47,7 +46,7 @@ router.get("/", auth, analyticsLimiter, async (req, res, next) => {
     const category = Object.entries(categoryMap).map(([name, value]) => ({ name, value }));
 
     const payload = { year: yearNum, monthly, totals: { incomeTotal, expenseTotal }, category };
-    await cacheSet(key, payload, 900); // 15 minutes
+    await cacheSet(key, payload, 900); 
     res.json({ cached: false, ...payload });
   } catch (e) { next(e); }
 });

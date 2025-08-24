@@ -22,7 +22,6 @@ dotenv.config();
 
 const app = express();
 
-// Security & parsing
 app.use(helmet());
 app.use(cors({ origin: process.env.CORS_ORIGIN?.split(',') || "*", credentials: true }));
 app.use(express.json({ limit: "1mb" }));
@@ -33,7 +32,6 @@ if (process.env.NODE_ENV !== "production") {
   app.use(morgan("dev"));
 }
 
-// Swagger setup
 const swaggerSpec = swaggerJsdoc({
   definition: {
     openapi: "3.0.0",
